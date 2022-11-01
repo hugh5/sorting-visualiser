@@ -4,13 +4,14 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 public class MainWindow implements ActionListener, ChangeListener {
     private final JFrame window;
     private MenuPanel menuPanel;
     private SortingPanel sortingPanel;
     public static final int MAX = 64;
-    public static final int MIN = 2;
+    public static final int MIN = 1;
 
 
     public MainWindow() {
@@ -49,12 +50,14 @@ public class MainWindow implements ActionListener, ChangeListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println(e);
-        if (e.getSource() instanceof JButton) {
-            if (e.getActionCommand().equals("generate")) {
-                sortingPanel.generateArray();
-            } else if (e.getActionCommand().equals("start")) {
-                sortingPanel.start(menuPanel.getSortingMethod());
-            }
+        if (e.getActionCommand().equals("generate")) {
+            sortingPanel.generateArray();
+        } else if (e.getActionCommand().equals("upload")) {
+            int[] array = menuPanel.getArray();
+            menuPanel.getLength().setValue(array.length);
+            sortingPanel.setArray(array);
+        } else if (e.getActionCommand().equals("start")) {
+            sortingPanel.start(menuPanel.getSortingMethod());
         }
     }
 

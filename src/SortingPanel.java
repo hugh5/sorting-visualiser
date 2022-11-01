@@ -11,7 +11,6 @@ public class SortingPanel extends JComponent {
     private Map<Integer, Color> map;
     private int[] array;
     private final Random r;
-    private int size;
     private int speed;
 
     private static final Color CURRENT = Color.ORANGE;
@@ -20,28 +19,33 @@ public class SortingPanel extends JComponent {
 
     public SortingPanel() {
         r = new Random(System.nanoTime());
-        size = MainWindow.MAX / 2;
-        generateArray();
-        map = new HashMap<>(size);
+        generateArray(MainWindow.MAX / 2);
         speed = 5;
     }
 
     public void paint(Graphics g) {
         int y =  getHeight() -20;
         int scalar = getHeight() / MainWindow.MAX - 1;
-        int width = Math.min(getWidth() / size, 100);
+        int width = Math.min(getWidth() / array.length, 100);
         g.setFont(new Font("Monospaced", Font.PLAIN, 16));
-        for (int i = 0; i < size; i++) {
-            g.setColor(Color.BLACK);
-            g.drawString(String.valueOf(array[i]), (int) i * width + width / 4, y + 15);
+        for (int i = 0; i < array.length; i++) {
             g.setColor(map.get(i));
             g.fillRect(i * width, y, width - 2, -scalar * array[i]);
+            g.setColor(Color.BLACK);
+            g.drawString(String.valueOf(array[i]), (int) i * width + width / 4, y + 15);
         }
     }
 
+    public void setArray(int[] array) {
+        this.array = array;
+        map = new HashMap<>(array.length);
+        System.out.println(Arrays.toString(array));
+        this.repaint();
+    }
+
     public void generateArray(int size) {
-        this.size = size;
-        IntStream ints = r.ints(size, 1, MainWindow.MAX);
+        size = Math.min(Math.max(size, MainWindow.MIN), MainWindow.MAX);
+        IntStream ints = r.ints(size, MainWindow.MIN, MainWindow.MAX);
         array = ints.toArray();
         map = new HashMap<>(size);
         System.out.println(Arrays.toString(array));
@@ -49,7 +53,7 @@ public class SortingPanel extends JComponent {
     }
 
     public void generateArray() {
-        generateArray(this.size);
+        generateArray(array.length);
     }
 
     public void start(SortingMethod sortingMethod) {
@@ -77,10 +81,10 @@ public class SortingPanel extends JComponent {
     private void selectionSort() {
         map.clear();
         int numSorted = 0;
-        for (int n = 0; n < size; n++) {
+        for (int n = 0; n < array.length; n++) {
             int minIndex = n;
             map.put(minIndex, MIN);
-            for (int i = numSorted; i < size; i++) {
+            for (int i = numSorted; i < array.length; i++) {
                 if (array[i] < array[minIndex]) {
                     map.remove(minIndex);
                     map.put(i, MIN);
@@ -108,7 +112,7 @@ public class SortingPanel extends JComponent {
     private void insertionSort() {
         map.clear();
         map.put(0, SORTED);
-        for (int n = 1; n < size; n++) {
+        for (int n = 1; n < array.length; n++) {
             for (int i = n; i > 0; i--) {
                 if (array[i] < array[i - 1]) {
                     map.put(i - 1, MIN);

@@ -11,6 +11,9 @@ public class MenuPanel {
     private JSlider length;
     private JLabel lengthLabel;
     private JComboBox<SortingMethod> sortingMethod;
+    private JButton upload;
+    private JTextField setArray;
+
     private JButton start;
     private JButton forward;
     private JButton backward;
@@ -43,6 +46,35 @@ public class MenuPanel {
         lengthLabel = new JLabel();
         northPanel.add(lengthLabel);
         lengthLabel.setText("Length:" + length.getValue());
+
+        URL dividerURL = getClass().getResource("assets/divider.png");
+        ImageIcon dividerIcon = null;
+        if (dividerURL != null) {
+            dividerIcon = new ImageIcon(dividerURL);
+            dividerIcon = new ImageIcon(dividerIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+            northPanel.add(new JLabel(dividerIcon));
+        } else {
+            northPanel.add(new JLabel("|"));
+        }
+
+        URL uploadURL = getClass().getResource("assets/upload.png");
+        if (uploadURL != null) {
+            ImageIcon uploadIcon = new ImageIcon(uploadURL);
+            uploadIcon = new ImageIcon(uploadIcon.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT));
+            upload = new JButton("Set Array", uploadIcon);
+        } else {
+            upload = new JButton("Set Array");
+        }
+        northPanel.add(upload);
+
+        setArray = new JTextField(String.format("[%d, %d, %d]", MainWindow.MAX, MainWindow.MAX / 4, MainWindow.MAX / 2), 30);
+        northPanel.add(setArray);
+
+        if (dividerIcon != null) {
+            northPanel.add(new JLabel(dividerIcon));
+        } else {
+            northPanel.add(new JLabel("|"));
+        }
 
         sortingMethod = new JComboBox<>(SortingMethod.values());
         northPanel.add(sortingMethod);
@@ -98,6 +130,23 @@ public class MenuPanel {
         return southPanel;
     }
 
+    public JSlider getLength () {
+        return length;
+    }
+
+    public int[] getArray() {
+        String[] values = setArray.getText().replace("[","").replace("]","").split(",");
+        int[] array = new int[Math.min(values.length, MainWindow.MAX)];
+        int i = 0;
+        for (String s : values) {
+            if (i > MainWindow.MAX) break;
+            try {
+                array[i++] = Integer.parseInt(s.strip());
+            } catch (NumberFormatException ignored) {}
+        }
+        return array;
+    }
+
     public SortingMethod getSortingMethod() {
         return (SortingMethod) sortingMethod.getSelectedItem();
     }
@@ -115,6 +164,10 @@ public class MenuPanel {
     public void addActionListeners(ActionListener actionListener) {
         generate.setActionCommand("generate");
         generate.addActionListener(actionListener);
+        upload.setActionCommand("upload");
+        upload.addActionListener(actionListener);
+        setArray.setActionCommand("upload");
+        setArray.addActionListener(actionListener);
 
         start.setActionCommand("start");
         start.addActionListener(actionListener);
