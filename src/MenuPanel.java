@@ -67,7 +67,7 @@ public class MenuPanel {
         }
         northPanel.add(upload);
 
-        setArray = new JTextField(String.format("[%d, %d, %d]", MainWindow.MAX, MainWindow.MAX / 4, MainWindow.MAX / 2), 30);
+        setArray = new JTextField("[15, 7, 2, 26, 55, 56, 47, 11]", 30);
         northPanel.add(setArray);
 
         if (dividerIcon != null) {
