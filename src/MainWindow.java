@@ -9,7 +9,7 @@ public class MainWindow implements ActionListener, ChangeListener {
     private final JFrame window;
     private MenuPanel menuPanel;
     private SortingPanel sortingPanel;
-    public static final int MAX = 48;
+    public static final int MAX = 64;
     public static final int MIN = 2;
 
 

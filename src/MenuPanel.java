@@ -10,14 +10,12 @@ public class MenuPanel {
     private JButton generate;
     private JSlider length;
     private JLabel lengthLabel;
-    private JComboBox<String> sortingMethod;
+    private JComboBox<SortingMethod> sortingMethod;
     private JButton start;
     private JButton forward;
     private JButton backward;
     private JSlider speed;
     private JLabel speedLabel;
-
-    private static final String[] sorts = new String[]{"Selection Sort"};
 
     public MenuPanel() {
         createNorthPanel();
@@ -46,7 +44,7 @@ public class MenuPanel {
         northPanel.add(lengthLabel);
         lengthLabel.setText("Length:" + length.getValue());
 
-        sortingMethod = new JComboBox<>(sorts);
+        sortingMethod = new JComboBox<>(SortingMethod.values());
         northPanel.add(sortingMethod);
     }
 
@@ -54,15 +52,15 @@ public class MenuPanel {
         southPanel = new JPanel();
         southPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        URL backURL = getClass().getResource("assets/backward.png");
-        if (backURL != null) {
-            ImageIcon backIcon = new ImageIcon(backURL);
-            backIcon = new ImageIcon(backIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
-            backward = new JButton(backIcon);
-        } else {
-            backward = new JButton("Step Backward");
-        }
-        southPanel.add(backward);
+//        URL backURL = getClass().getResource("assets/backward.png");
+//        if (backURL != null) {
+//            ImageIcon backIcon = new ImageIcon(backURL);
+//            backIcon = new ImageIcon(backIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+//            backward = new JButton(backIcon);
+//        } else {
+//            backward = new JButton("Step Backward");
+//        }
+//        southPanel.add(backward);
 
         URL startURL = getClass().getResource("assets/start.png");
         if (startURL != null) {
@@ -74,15 +72,15 @@ public class MenuPanel {
         }
         southPanel.add(start);
 
-        URL forwardURL = getClass().getResource("assets/forward.png");
-        if (forwardURL != null) {
-            ImageIcon forwardIcon = new ImageIcon(forwardURL);
-            forwardIcon = new ImageIcon(forwardIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
-            forward = new JButton(forwardIcon);
-        } else {
-            forward = new JButton("Step Forward");
-        }
-        southPanel.add(forward);
+//        URL forwardURL = getClass().getResource("assets/forward.png");
+//        if (forwardURL != null) {
+//            ImageIcon forwardIcon = new ImageIcon(forwardURL);
+//            forwardIcon = new ImageIcon(forwardIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+//            forward = new JButton(forwardIcon);
+//        } else {
+//            forward = new JButton("Step Forward");
+//        }
+//        southPanel.add(forward);
 
         speed = new JSlider(1, 10);
         southPanel.add(speed);
@@ -100,8 +98,8 @@ public class MenuPanel {
         return southPanel;
     }
 
-    public String getSortingMethod() {
-        return (String) sortingMethod.getSelectedItem();
+    public SortingMethod getSortingMethod() {
+        return (SortingMethod) sortingMethod.getSelectedItem();
     }
 
     public void addChangeListeners(ChangeListener changeListener) {
@@ -120,9 +118,9 @@ public class MenuPanel {
 
         start.setActionCommand("start");
         start.addActionListener(actionListener);
-        backward.setActionCommand("backward");
-        backward.addActionListener(actionListener);
-        forward.setActionCommand("forward");
-        forward.addActionListener(actionListener);
+//        backward.setActionCommand("backward");
+//        backward.addActionListener(actionListener);
+//        forward.setActionCommand("forward");
+//        forward.addActionListener(actionListener);
     }
 }

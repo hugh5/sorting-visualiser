@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,9 +52,13 @@ public class SortingPanel extends JComponent {
         generateArray(this.size);
     }
 
-    public void start(String sortingMethod) {
-        System.out.println(this.getClass().getSimpleName() + "." + sortingMethod.replace(" ", "") + "()");
-        selectionSort();
+    public void start(SortingMethod sortingMethod) {
+        System.out.println("Starting: " + sortingMethod);
+        if (sortingMethod == SortingMethod.SELECTION) {
+            selectionSort();
+        } else if (sortingMethod == SortingMethod.INSERTION) {
+            insertionSort();
+        }
     }
 
     public void setSpeed(int speed) {
@@ -83,7 +86,11 @@ public class SortingPanel extends JComponent {
                     map.put(i, MIN);
                     minIndex = i;
                 } else {
-                    map.put(i, CURRENT);
+                    if (i == numSorted) {
+                        map.put(i, MIN);
+                    } else {
+                        map.put(i, CURRENT);
+                    }
                 }
                 updateScreen();
                 if (map.get(i) == CURRENT) map.remove(i);
@@ -94,7 +101,32 @@ public class SortingPanel extends JComponent {
             map.remove(minIndex);
             map.put(numSorted, SORTED);
             numSorted++;
-            repaint();
+            updateScreen();
         }
+    }
+
+    private void insertionSort() {
+        map.clear();
+        map.put(0, SORTED);
+        for (int n = 1; n < size; n++) {
+            for (int i = n; i > 0; i--) {
+                if (array[i] < array[i - 1]) {
+                    map.put(i - 1, MIN);
+                    map.put(i, CURRENT);
+                    updateScreen();
+                    map.put(i-1, SORTED);
+                    map.put(i, SORTED);
+                    int temp = array[i - 1];
+                    array[i - 1] = array[i];
+                    array[i] = temp;
+                } else {
+                    map.put(i, SORTED);
+                    updateScreen();
+                    break;
+                }
+            }
+            updateScreen();
+        }
+        repaint();
     }
 }
