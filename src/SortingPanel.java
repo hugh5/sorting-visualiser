@@ -1,9 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 public class SortingPanel extends JComponent {
@@ -16,6 +15,8 @@ public class SortingPanel extends JComponent {
     private static final Color CURRENT = Color.ORANGE;
     private static final Color SORTED = Color.GREEN;
     private static final Color MIN = Color.RED;
+
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     public SortingPanel() {
         r = new Random(System.nanoTime());
@@ -32,14 +33,14 @@ public class SortingPanel extends JComponent {
             g.setColor(map.get(i));
             g.fillRect(i * width, y, width - 2, -scalar * array[i]);
             g.setColor(Color.BLACK);
-            g.drawString(String.valueOf(array[i]), (int) i * width + width / 4, y + 15);
+            g.drawString(String.valueOf(array[i]), i * width + width / 4, y + 15);
         }
     }
 
     public void setArray(int[] array) {
         this.array = array;
         map = new HashMap<>(array.length);
-        System.out.println(Arrays.toString(array));
+        logger.log(Level.INFO, Arrays.toString(array));
         this.repaint();
     }
 
@@ -47,8 +48,8 @@ public class SortingPanel extends JComponent {
         size = Math.min(Math.max(size, MainWindow.MIN), MainWindow.MAX);
         IntStream ints = r.ints(size, MainWindow.MIN, MainWindow.MAX);
         array = ints.toArray();
-        map = new HashMap<>(size);
-        System.out.println(Arrays.toString(array));
+        map = new HashMap<>(array.length);
+        logger.log(Level.INFO, Arrays.toString(array));
         this.repaint();
     }
 
@@ -57,11 +58,14 @@ public class SortingPanel extends JComponent {
     }
 
     public void start(SortingMethod sortingMethod) {
-        System.out.println("Starting: " + sortingMethod);
+        logger.log(Level.INFO, String.valueOf(sortingMethod));
+        map.clear();
         if (sortingMethod == SortingMethod.SELECTION) {
             selectionSort();
         } else if (sortingMethod == SortingMethod.INSERTION) {
             insertionSort();
+        } else if (sortingMethod == SortingMethod.MERGE) {
+            mergeSort(Arrays.copyOf(array, array.length), 0, array.length - 1);
         }
     }
 
@@ -79,7 +83,6 @@ public class SortingPanel extends JComponent {
     }
 
     private void selectionSort() {
-        map.clear();
         int numSorted = 0;
         for (int n = 0; n < array.length; n++) {
             int minIndex = n;
@@ -110,7 +113,6 @@ public class SortingPanel extends JComponent {
     }
 
     private void insertionSort() {
-        map.clear();
         map.put(0, SORTED);
         for (int n = 1; n < array.length; n++) {
             for (int i = n; i > 0; i--) {
@@ -132,5 +134,57 @@ public class SortingPanel extends JComponent {
             updateScreen();
         }
         repaint();
+    }
+
+    private int[] mergeSort(int[] arr, int lower, int upper) {
+        int diff = upper - lower;
+        logger.log(Level.INFO, String.format("Lower:%d, Upper:%d, Diff:%d", lower, upper, diff));
+        Color c = new Color(r.nextInt(255), r.nextInt(255), r.nextInt(255));
+        if (diff == 0) {
+            map.put(lower, c);
+            updateScreen();
+            return new int[]{arr[lower]};
+        }  else if (diff == 1) {
+            map.put(lower, c);
+            map.put(upper, c);
+            updateScreen();
+            if (arr[lower] < arr[upper]) {
+                return new int[]{arr[lower], arr[upper]};
+            } else {
+                array[lower] = arr[upper];
+                array[upper] = arr[lower];
+                updateScreen();
+                return new int[]{arr[upper], arr[lower]};
+            }
+        } else {
+            int[] a = mergeSort(arr, lower, upper - (diff / 2) - 1);
+            int[] b = mergeSort(arr, upper - (diff / 2), upper);
+            return mergeArray(a, b, lower, c);
+        }
+    }
+
+    private int[] mergeArray(int[] a, int[] b, int lower, Color color) {
+        int[] c = new int[a.length + b.length];
+        int i = 0, j = 0, k = 0;
+        while (i < a.length && j < b.length)
+        {
+            if (a[i] < b[j]) {
+                c[k++] = a[i++];
+            } else {
+                c[k++] = b[j++];
+            }
+        }
+        while (i < a.length) {
+            c[k++] = a[i++];
+        }
+        while (j < b.length) {
+            c[k++] = b[j++];
+        }
+        for (int n = 0; n < c.length; n++) {
+            array[lower + n] = c[n];
+            map.put(lower + n, color);
+            updateScreen();
+        }
+        return c;
     }
 }

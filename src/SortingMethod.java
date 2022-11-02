@@ -1,4 +1,5 @@
 public enum SortingMethod {
     SELECTION,
-    INSERTION
+    INSERTION,
+    MERGE,
 }

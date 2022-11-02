@@ -4,7 +4,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainWindow implements ActionListener, ChangeListener {
     private final JFrame window;
@@ -13,6 +14,7 @@ public class MainWindow implements ActionListener, ChangeListener {
     public static final int MAX = 64;
     public static final int MIN = 1;
 
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     public MainWindow() {
         window = new JFrame();
@@ -49,7 +51,7 @@ public class MainWindow implements ActionListener, ChangeListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println(e);
+        logger.log(Level.INFO, e.toString());
         if (e.getActionCommand().equals("generate")) {
             sortingPanel.generateArray();
         } else if (e.getActionCommand().equals("upload")) {
@@ -66,10 +68,10 @@ public class MainWindow implements ActionListener, ChangeListener {
         if (e.getSource() instanceof JSlider) {
             if (((JSlider)e.getSource()).getName().equals("length")) {
                 sortingPanel.generateArray(((JSlider) e.getSource()).getValue());
-                System.out.println(((JSlider) e.getSource()).getValue() + ":" + e);
+                logger.log(Level.INFO, "Length=" + ((JSlider) e.getSource()).getValue() + ":" + e);
             } else if (((JSlider)e.getSource()).getName().equals("speed")) {
                 sortingPanel.setSpeed(((JSlider) e.getSource()).getValue());
-                System.out.println(((JSlider) e.getSource()).getValue() + ":" + e);
+                logger.log(Level.INFO, "Speed=" + ((JSlider) e.getSource()).getValue() + " : " + e);
             }
         }
     }

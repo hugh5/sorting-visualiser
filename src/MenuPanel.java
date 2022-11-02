@@ -3,6 +3,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import java.util.logging.Logger;
 
 public class MenuPanel {
     private JPanel northPanel;
@@ -19,6 +20,8 @@ public class MenuPanel {
     private JButton backward;
     private JSlider speed;
     private JLabel speedLabel;
+
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     public MenuPanel() {
         createNorthPanel();
