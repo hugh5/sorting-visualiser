@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
@@ -26,7 +27,7 @@ public class SortingPanel extends JComponent {
 
     public void paint(Graphics g) {
         int y =  getHeight() -20;
-        int scalar = getHeight() / MainWindow.MAX - 1;
+        int scalar = getHeight() / array.length - 1;
         int width = Math.min(getWidth() / array.length, 100);
         g.setFont(new Font("Monospaced", Font.PLAIN, 16));
         for (int i = 0; i < array.length; i++) {
@@ -46,8 +47,12 @@ public class SortingPanel extends JComponent {
 
     public void generateArray(int size) {
         size = Math.min(Math.max(size, MainWindow.MIN), MainWindow.MAX);
-        IntStream ints = r.ints(size, MainWindow.MIN, MainWindow.MAX);
-        array = ints.toArray();
+        List<Integer> list = new LinkedList<>();
+        IntStream.range(MainWindow.MIN, size + 1).forEach(list::add);
+        array = new int[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = list.remove(r.nextInt(list.size()));
+        }
         map = new HashMap<>(array.length);
         logger.log(Level.INFO, Arrays.toString(array));
         this.repaint();
