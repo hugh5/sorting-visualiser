@@ -27,15 +27,15 @@ public class SortingPanel extends JComponent {
     }
 
     public void paint(Graphics g) {
-        int y =  getHeight() -20;
-        int scalar = getHeight() / max - 1;
+        int y =  getHeight() - 20;
+        int scalar = getHeight() / max;
         int width = Math.min(getWidth() / array.length, 100);
         g.setFont(new Font("Monospaced", Font.PLAIN, 16));
         for (int i = 0; i < array.length; i++) {
             g.setColor(map.get(i));
-            g.fillRect(i * width, y, width - 2, -scalar * array[i]);
+            g.fillRect(i * width, y, width - 1, -scalar * array[i]);
             g.setColor(Color.BLACK);
-            g.drawString(String.valueOf(array[i]), i * width + width / 4, y + 15);
+//            g.drawString(String.valueOf(array[i]), i * width + width / 4, y + 15);
         }
     }
 
@@ -184,6 +184,11 @@ public class SortingPanel extends JComponent {
         int i = 0, j = 0, k = 0;
         while (i < a.length && j < b.length)
         {
+            Color part1 = map.put(lower + i, MIN);
+            Color part2 = map.put(lower + a.length + j, MIN);
+            updateScreen();
+            map.put(lower + i, part1);
+            map.put(lower + a.length + j, part2);
             if (a[i] < b[j]) {
                 c[k++] = a[i++];
             } else {
@@ -191,9 +196,15 @@ public class SortingPanel extends JComponent {
             }
         }
         while (i < a.length) {
+            Color part1 = map.put(lower + i, MIN);
+            updateScreen();
+            map.put(lower + i, part1);
             c[k++] = a[i++];
         }
         while (j < b.length) {
+            Color part2 = map.put(lower + a.length + j, MIN);
+            updateScreen();
+            map.put(lower + a.length + j, part2);
             c[k++] = b[j++];
         }
         for (int n = 0; n < c.length; n++) {
