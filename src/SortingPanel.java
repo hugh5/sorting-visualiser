@@ -10,6 +10,7 @@ public class SortingPanel extends JComponent {
 
     private Map<Integer, Color> map;
     private int[] array;
+    private int max;
     private final Random r;
     private int speed;
 
@@ -27,7 +28,7 @@ public class SortingPanel extends JComponent {
 
     public void paint(Graphics g) {
         int y =  getHeight() -20;
-        int scalar = getHeight() / array.length - 1;
+        int scalar = getHeight() / max - 1;
         int width = Math.min(getWidth() / array.length, 100);
         g.setFont(new Font("Monospaced", Font.PLAIN, 16));
         for (int i = 0; i < array.length; i++) {
@@ -41,6 +42,7 @@ public class SortingPanel extends JComponent {
     public void setArray(int[] array) {
         this.array = array;
         map = new HashMap<>(array.length);
+        max = getMax(array);
         logger.log(Level.INFO, Arrays.toString(array));
         this.repaint();
     }
@@ -54,12 +56,21 @@ public class SortingPanel extends JComponent {
             array[i] = list.remove(r.nextInt(list.size()));
         }
         map = new HashMap<>(array.length);
+        max = size;
         logger.log(Level.INFO, Arrays.toString(array));
         this.repaint();
     }
 
     public void generateArray() {
         generateArray(array.length);
+    }
+
+    private int getMax(int[] arr) {
+        int max = 0;
+        for (int j : arr) {
+            if (j > max) max = j;
+        }
+        return max;
     }
 
     public void start(SortingMethod sortingMethod) {
