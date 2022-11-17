@@ -1,4 +1,4 @@
-# sorting-visualier
+# sorting-visualiser
 Includes:
 - Selection Sort
 - Insertion Sort
