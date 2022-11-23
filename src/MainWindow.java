@@ -11,7 +11,7 @@ public class MainWindow implements ActionListener, ChangeListener {
     private final JFrame window;
     private MenuPanel menuPanel;
     private SortingPanel sortingPanel;
-    public static final int MAX = 383;
+    public static final int MAX = 256;
     public static final int MIN = 1;
 
     private final Logger logger = Logger.getLogger(this.getClass().getName());

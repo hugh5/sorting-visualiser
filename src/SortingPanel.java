@@ -27,15 +27,17 @@ public class SortingPanel extends JComponent {
     }
 
     public void paint(Graphics g) {
-        int y =  getHeight() - 20;
         int scalar = getHeight() / max;
         int width = Math.min(getWidth() / array.length, 100);
         g.setFont(new Font("Monospaced", Font.PLAIN, 16));
         for (int i = 0; i < array.length; i++) {
-            g.setColor(map.get(i));
-            g.fillRect(i * width, y, width - 1, -scalar * array[i]);
             g.setColor(Color.BLACK);
-//            g.drawString(String.valueOf(array[i]), i * width + width / 4, y + 15);
+            g.setColor(map.get(i));
+            g.fillRect(i * width, getHeight() - scalar * array[i], width - 1, scalar * array[i]);
+            if (width >= 24) {
+                g.setColor(Color.WHITE);
+                g.drawString(String.valueOf(array[i]), i * width + width / 4, getHeight() - 5);
+            }
         }
     }
 
