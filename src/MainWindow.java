@@ -47,7 +47,7 @@ public class MainWindow implements ActionListener, ChangeListener {
 
     public void show() {
         window.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        window.setUndecorated(true);
+//        window.setUndecorated(true);
         window.setVisible(true);
     }
 
